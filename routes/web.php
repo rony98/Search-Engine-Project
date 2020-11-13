@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () { return view('search'); });
+Route::get('/', 'SearchController@index')->name('search');
 
-Route::post('/results', 'GenerateRanking@generateRanking')->name('generateRanking');
+Route::post('/results', 'GenerateRankingController@generateRanking');

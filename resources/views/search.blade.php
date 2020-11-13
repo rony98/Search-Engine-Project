@@ -48,12 +48,29 @@
             font-size: 84px;
         }
 
-        .search > a {
+        .searchLabel {
             color: #636b6f;
             padding: 0 25px;
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 600;
             letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+	.searchTxt {
+            color: #636b6f;
+	    font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            width: 600px;
+        }
+
+        .searchBtn {
+            color: #636b6f;
+            font-size: 16px;
+            font-weight: 600;
+	    letter-spacing: .1rem;
             text-decoration: none;
             text-transform: uppercase;
         }
@@ -70,10 +87,13 @@
             Search Engine Project
         </div>
 
-        {{ Form::open(array('url' => route('generateRanking'))) }}
-        {{ Form::label('queryLabel', 'Please enter your query below', array('class' => 'search')) }}
-        {{ Form::text('query', array('class' => 'search')) }}
-        {{ Form::submit('Submit Query') }}
+        {{ Form::open(array('url' => action('GenerateRankingController@generateRanking'))) }}
+	{{ Form::label('queryLabel', 'Please enter your query below:', array('class' => 'searchLabel')) }}
+        <br><br>
+        {{ Form::text('query', 'default', array('class' => 'searchTxt')) }}
+        <br><br>
+        {{ Form::submit('Submit Query', array('class' => 'searchBtn')) }}
+        <br><br>
         {{ Form::close() }}
 
     </div>
