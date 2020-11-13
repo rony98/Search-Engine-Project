@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Tags\Url;
+use Spatie\Crawler\Crawler;
 
 class runCrawler extends Command
 {
@@ -11,14 +14,14 @@ class runCrawler extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'crawler:run';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Runs the crawler for hardcoded list of websites';
 
     /**
      * Create a new command instance.
@@ -37,6 +40,16 @@ class runCrawler extends Command
      */
     public function handle()
     {
-        return 0;
+        $websites = ["https://wwww.bbc.com/news"];
+
+        foreach ($websites as $website) {
+            SitemapGenerator::create($website)
+                ->configureCrawler(function (Crawler $crawler) {
+                    $crawler->ignoreRobots();
+                })
+                ->hasCrawled(function (Url $url) {
+                    $this->info($url);
+                });
+        }
     }
 }
