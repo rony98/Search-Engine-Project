@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
-class GenerateRanking extends Controller
+class GenerateRankingController extends Controller
 {
     public function __construct()
     {

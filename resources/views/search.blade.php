@@ -48,12 +48,29 @@
             font-size: 84px;
         }
 
-        .search > a {
+        .searchLabel {
             color: #636b6f;
             padding: 0 25px;
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 600;
             letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .searchTxt {
+            color: #636b6f;
+	        font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            width: 600px;
+        }
+
+        .searchBtn {
+            color: #636b6f;
+            font-size: 16px;
+            font-weight: 600;
+	        letter-spacing: .1rem;
             text-decoration: none;
             text-transform: uppercase;
         }
@@ -62,6 +79,25 @@
             margin-bottom: 30px;
         }
     </style>
+
+    <script>
+        function submitQuery()
+        {
+            var url = '{{ route('submitQuery', [":query"] ) }}';
+            url = url.replace(':query', escapeOutput(document.getElementById("query").value));
+            window.location.assign(url)
+        }
+
+        function escapeOutput(toOutput){
+            return toOutput
+                .replace(/\&/g, '&amp;')
+                .replace(/\</g, '&lt;')
+                .replace(/\>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/\'/g, '&#x27')
+                .replace(/\//g, '&#x2F');
+        }
+    </script>
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -70,12 +106,17 @@
             Search Engine Project
         </div>
 
-        {{ Form::open(array('url' => route('generateRanking'))) }}
-        {{ Form::label('queryLabel', 'Please enter your query below', array('class' => 'search')) }}
-        {{ Form::text('query', array('class' => 'search')) }}
-        {{ Form::submit('Submit Query') }}
-        {{ Form::close() }}
+        <label class="searchLabel" for="query">Please enter your query below:</label>
 
+        <br><br>
+
+        <input type="text" class="searchTxt" id="query" maxlength="256">
+
+        <br><br>
+
+        <button id="submit" onclick="submitQuery()" class="searchBtn"></button>
+
+        <br><br>
     </div>
 </div>
 </body>
