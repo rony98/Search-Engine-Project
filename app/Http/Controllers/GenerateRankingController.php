@@ -16,13 +16,24 @@ class GenerateRankingController extends Controller
     {
         $query = $request->request->get('param');
 
-        error_log($query);
-
         $results = DB::select('select * from results');
         $results = json_decode(json_encode($results), true);
 
-        error_log($results);
+	// Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
+	// array:1 [▼
+	//     0 => array:2 [▼
+	// 	 "description" => "random description"
+	// 	 "website" => "http://tst.com"
+	//     ]
+	// ]
 
+	// Returns first description
+	// $results[0]["description"];
+	
+	// Returns first website
+	// $results[0]["website"];
+
+	// Leave the return for now. Will update in future with a proper page
         return redirect()->route('search');
     }
 }
