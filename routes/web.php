@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'SearchController@index')->name('search');
 
-Route::post('/results/{query}', 'GenerateRankingController@generateRanking')->name('submitQuery');
+Route::get('/results/{query}', 'GenerateRankingController@generateRanking')->name('submitQuery');
