@@ -35,17 +35,21 @@ class runCrawler extends Command
         parent::__construct();
     }
 
-private function remove_invalid($Str) {  
-  $StrArr = str_split($Str); $NewStr = '';
-  foreach ($StrArr as $Char) {    
-    $CharNo = ord($Char);
-    if ($CharNo == 163) { $NewStr .= $Char; continue; } // keep £ 
-    if ($CharNo > 31 && $CharNo < 127) {
-      $NewStr .= $Char;    
+    private function remove_invalid($Str) {
+        $StrArr = str_split($Str); $NewStr = '';
+
+        foreach ($StrArr as $Char) {
+            $CharNo = ord($Char);
+
+            if ($CharNo == 163) { $NewStr .= $Char; continue; } // keep £
+
+            if ($CharNo > 31 && $CharNo < 127) {
+                $NewStr .= $Char;
+            }
+        }
+
+        return mb_convert_encoding(iconv("UTF-8", "UTF-8//IGNORE", $NewStr), 'UTF-8', 'UTF-8');
     }
-  }  
-  return mb_convert_encoding(iconv("UTF-8", "UTF-8//IGNORE", $NewStr), 'UTF-8', 'UTF-8');
-}
 
     private function follow_links($url, $home){
         $doc = new DOMDocument();
@@ -65,13 +69,13 @@ private function remove_invalid($Str) {
             if (!in_array($full_link, $this->already_crawled) && substr($full_link, 0, 4) == "http") {
                 $this->already_crawled[] = $full_link;
                 $this->crawling[] = $full_link;
-		echo $full_link.PHP_EOL;
-                // Insert data in the DB
-                
-		$dom = new DOMDocument;
-		@$dom->loadHTMLFile($full_link);
 
-		$html = new \Html2Text\Html2Text($dom->saveHTML($dom->getElementsByTagName('body')->item(0)));
+                echo $full_link.PHP_EOL;
+
+                $dom = new DOMDocument;
+                @$dom->loadHTMLFile($full_link);
+
+                $html = new \Html2Text\Html2Text($dom->saveHTML($dom->getElementsByTagName('body')->item(0)));
 
                 DB::table('results')->insert([
                     ['description' => $this->remove_invalid($html->getText()), 'website' => $this->remove_invalid($full_link)]
