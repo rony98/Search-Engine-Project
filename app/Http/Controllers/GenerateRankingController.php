@@ -16,11 +16,13 @@ class GenerateRankingController extends Controller
     {
         $query = $request->request->get('param');
 
-        info($query);
+        error_log($query);
 
         $results = DB::select('select * from info_project');
         $results = json_decode(json_encode($results), true);
 
-        return $results;
+        error_log($results);
+
+        return redirect()->route('search');
     }
 }

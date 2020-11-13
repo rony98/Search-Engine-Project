@@ -114,7 +114,7 @@
 
         <br><br>
 
-        <button id="submit" onclick="submitQuery()" class="searchBtn"></button>
+        <button id="submit" onclick="submitQuery()" class="searchBtn">Submit Query</button>
 
         <br><br>
     </div>
