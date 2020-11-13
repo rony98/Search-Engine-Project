@@ -3,12 +3,14 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Sitemap\SitemapGenerator;
-use Spatie\Sitemap\Tags\Url;
-use Spatie\Crawler\Crawler;
+use DOMDocument;
 
 class runCrawler extends Command
 {
+
+private $already_crawled = [];
+private $crawling = [];
+
     /**
      * The name and signature of the console command.
      *
@@ -33,6 +35,33 @@ class runCrawler extends Command
         parent::__construct();
     }
 
+private function follow_links($url, $home){
+  global $already_crawled;
+  global $crawling;
+
+  $doc = new DOMDocument();
+  $doc->loadHTML(file_get_contents($url));
+
+  $linklist = $doc->getElementsByTagName('a');
+
+  foreach ($linklist as $link) {
+    $l = $link->getAttribute("href");
+    $full_link = $home.$l;
+
+    if (!in_array($full_link, $already_crawled)) {
+      $already_crawled[] = $full_link;
+      $crawling[] = $full_link;
+      echo $full_link.PHP_EOL;
+      // Insert data in the DB
+    }
+  }
+
+  array_shift($crawling);
+  foreach ($crawling as $link) {
+    follow_links($link, $home);
+  }
+}
+
     /**
      * Execute the console command.
      *
@@ -40,16 +69,10 @@ class runCrawler extends Command
      */
     public function handle()
     {
-        $websites = ["https://wwww.bbc.com/news"];
+        $websites = ["https://bbc.com/news"];
 
         foreach ($websites as $website) {
-            SitemapGenerator::create($website)
-                ->configureCrawler(function (Crawler $crawler) {
-                    $crawler->ignoreRobots();
-                })
-                ->hasCrawled(function (Url $url) {
-                    $this->info($url);
-                });
+		follow_links($website, $home);
         }
     }
 }
