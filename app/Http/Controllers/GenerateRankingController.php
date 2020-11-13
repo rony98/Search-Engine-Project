@@ -18,7 +18,7 @@ class GenerateRankingController extends Controller
 
         error_log($query);
 
-        $results = DB::select('select * from info_project');
+        $results = DB::select('select * from results');
         $results = json_decode(json_encode($results), true);
 
         error_log($results);
