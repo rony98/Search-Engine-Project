@@ -7,9 +7,8 @@ use DOMDocument;
 
 class runCrawler extends Command
 {
-
-private $already_crawled = [];
-private $crawling = [];
+    var $already_crawled = [];
+    var $crawling = [];
 
     /**
      * The name and signature of the console command.
@@ -35,32 +34,30 @@ private $crawling = [];
         parent::__construct();
     }
 
-private function follow_links($url, $home){
-  global $already_crawled;
-  global $crawling;
+    private function follow_links($url, $home){
+        $doc = new DOMDocument();
+        $doc->loadHTML(file_get_contents($url));
 
-  $doc = new DOMDocument();
-  $doc->loadHTML(file_get_contents($url));
+        $linklist = $doc->getElementsByTagName('a');
 
-  $linklist = $doc->getElementsByTagName('a');
+        foreach ($linklist as $link) {
+            $l = $link->getAttribute("href");
+            $full_link = $home.$l;
 
-  foreach ($linklist as $link) {
-    $l = $link->getAttribute("href");
-    $full_link = $home.$l;
+            if (!in_array($full_link, $this->already_crawled)) {
+                $this->already_crawled[] = $full_link;
+                $this->crawling[] = $full_link;
+                echo $full_link.PHP_EOL;
+                // Insert data in the DB
 
-    if (!in_array($full_link, $already_crawled)) {
-      $already_crawled[] = $full_link;
-      $crawling[] = $full_link;
-      echo $full_link.PHP_EOL;
-      // Insert data in the DB
+            }
+        }
+
+        array_shift($this->crawling);
+        foreach ($this->crawling as $link) {
+            $this->follow_links($link, $home);
+        }
     }
-  }
-
-  array_shift($crawling);
-  foreach ($crawling as $link) {
-    follow_links($link, $home);
-  }
-}
 
     /**
      * Execute the console command.
@@ -72,7 +69,7 @@ private function follow_links($url, $home){
         $websites = ["https://bbc.com/news"];
 
         foreach ($websites as $website) {
-		follow_links($website, $home);
+            $this->follow_links($website, $website);
         }
     }
 }
