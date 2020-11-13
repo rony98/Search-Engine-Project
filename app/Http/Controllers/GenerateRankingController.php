@@ -12,9 +12,11 @@ class GenerateRankingController extends Controller
 
     }
 
-    public function generateRanking(Request $request)
+    public function generateRanking($query)
     {
-        $query = $request->request->get('param');
+	// To use the query, just use the $query variable. E.g.
+	// dd($query);
+	// The above command will output query to the page
 
         $results = DB::select('select * from results');
         $results = json_decode(json_encode($results), true);
