@@ -14,7 +14,7 @@ class CreateResultsTable extends Migration
     public function up()
     {
         Schema::create('results', function (Blueprint $table) {
-            $table->string('description', 64535);
+            $table->longText('description');
             $table->string('website', 1000)->unique();
         });
     }
