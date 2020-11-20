@@ -49,6 +49,8 @@ class GenerateRankingController extends Controller
 
 		var_dump($finalScore);
 
+		die();
+
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
 	    // array:1 [▼
 	    //     0 => array:2 [▼
