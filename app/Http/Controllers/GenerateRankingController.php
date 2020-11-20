@@ -1,9 +1,11 @@
 <?php
+include "pr.php";
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+
 
 class GenerateRankingController extends Controller
 {
@@ -17,9 +19,35 @@ class GenerateRankingController extends Controller
 	    // To use the query, just use the $query variable. E.g.
 	    // dd($query);
 	    // The above command will output query to the page
-
+		$queryArray = explode(" ", $query);
         $results = DB::select('select * from results');
         $results = json_decode(json_encode($results), true);
+
+		$index = getIndex($results);
+		$matchDocs = array();
+		$docCount = count($index['docCount']);
+
+		foreach($queryArray as $qterm) {
+				$entry = $index['dictionary'][$qterm];
+				foreach($entry['postings'] as $docID => $posting) {
+						$matchDocs[$docID] +=
+										$posting['tf'] *
+										log($docCount + 1 / $entry['df'] + 1, 2);
+				}
+		}
+
+		foreach($matchDocs as $docID => $score) {
+				$matchDocs[$docID] = $score/$index['docCount'][$docID];
+		}
+		
+		$finalScore = array();
+		foreach($matchDocs as $docID => $score) {
+			$finalScore[$docID] = 0.5 * cosineSim() + 0.5 * getPagerank($result[$docID]["website"]);
+		}
+
+		arsort($finalScore); // high to low
+
+		var_dump($finalScore);
 
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
 	    // array:1 [▼
@@ -37,5 +65,38 @@ class GenerateRankingController extends Controller
 
 	    // Leave the return for now. Will update in future with a proper page
         return redirect()->route('search');
-    }
+	}
+	
+	function cosineSim($docA, $docB) {
+        $result = 0;
+        foreach($docA as $key => $weight) {
+                $result += $weight * $docB[$key];
+        }
+        return $result;
+	}
+
+	function getIndex($collection) {
+        
+        $dictionary = array();
+        $docCount = array();
+
+        foreach($collection as $docID => $doc["description"]) {
+                $terms = explode(' ', $doc["description"]);
+                $docCount[$docID] = count($terms);
+
+                foreach($terms as $term) {
+                        if(!isset($dictionary[$term])) {
+                                $dictionary[$term] = array('df' => 0, 'postings' => array());
+                        }
+                        if(!isset($dictionary[$term]['postings'][$docID])) {
+                                $dictionary[$term]['df']++;
+                                $dictionary[$term]['postings'][$docID] = array('tf' => 0);
+                        }
+
+                        $dictionary[$term]['postings'][$docID]['tf']++;
+                }
+        }
+
+        return array('docCount' => $docCount, 'dictionary' => $dictionary);
+}
 }
