@@ -60,7 +60,7 @@ class runCrawler extends Command
         foreach ($linklist as $link) {
             $l = $link->getAttribute("href");
 
-	    if (strpos($l, "https://") !== false || strpos($l, "http://") !== false || strpos($l, "www.") !== false) {
+	        if (strpos($l, "https://") !== false || strpos($l, "http://") !== false || strpos($l, "www.") !== false) {
                 $full_link = $l;
             } else {
                 $full_link = $home.$l;
@@ -82,6 +82,8 @@ class runCrawler extends Command
                 ]);
             }
         }
+
+        //Create another controller to check for duplicates/delete if there are
 
         array_shift($this->crawling);
         foreach ($this->crawling as $link) {

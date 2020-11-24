@@ -1,7 +1,7 @@
 <?php
-include "pr.php";
 
 namespace App\Http\Controllers;
+include "pr.php";
 
 use Illuminate\Http\Request;
 use DB;
@@ -23,7 +23,7 @@ class GenerateRankingController extends Controller
         $results = DB::select('select * from results');
         $results = json_decode(json_encode($results), true);
 
-		$index = getIndex($results);
+		$index = $this->getIndex($results);
 		$matchDocs = array();
 		$docCount = count($index['docCount']);
 
@@ -39,10 +39,10 @@ class GenerateRankingController extends Controller
 		foreach($matchDocs as $docID => $score) {
 				$matchDocs[$docID] = $score/$index['docCount'][$docID];
 		}
-		
+
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
-			$finalScore[$docID] = 0.5 * cosineSim() + 0.5 * getPagerank($result[$docID]["website"]);
+			$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5 * getPagerank($results[$docID]["website"]);
 		}
 
 		arsort($finalScore); // high to low
@@ -66,9 +66,9 @@ class GenerateRankingController extends Controller
 	    // $results[0]["website"];
 
 	    // Leave the return for now. Will update in future with a proper page
-        return redirect()->route('search');
+        //return redirect()->route('search');
 	}
-	
+
 	function cosineSim($docA, $docB) {
         $result = 0;
         foreach($docA as $key => $weight) {
@@ -78,12 +78,12 @@ class GenerateRankingController extends Controller
 	}
 
 	function getIndex($collection) {
-        
+
         $dictionary = array();
         $docCount = array();
 
-        foreach($collection as $docID => $doc["description"]) {
-                $terms = explode(' ', $doc["description"]);
+        foreach($collection as $docID => $description) {
+                $terms = explode(' ', $description);
                 $docCount[$docID] = count($terms);
 
                 foreach($terms as $term) {
@@ -100,5 +100,5 @@ class GenerateRankingController extends Controller
         }
 
         return array('docCount' => $docCount, 'dictionary' => $dictionary);
-}
+    }
 }
