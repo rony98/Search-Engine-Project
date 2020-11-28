@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
-ini_set('memory_limit', '20000M');
 
 class GenerateRankingController extends Controller
 {
@@ -112,7 +111,7 @@ class GenerateRankingController extends Controller
 
         $dictionary = array();
         $docCount = array();
-        for ($x = 0; $x <= count($collection); $x++) {
+        for ($x = 0; $x < count($collection); $x++) {
             $terms = explode(' ', $collection[$x]["description"]);
             $docCount[$x] = count($terms);
 
