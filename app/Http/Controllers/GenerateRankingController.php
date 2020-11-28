@@ -41,7 +41,7 @@ class GenerateRankingController extends Controller
 
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
-			$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5 * getPagerank($results[$docID]["website"]);
+			$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5;
 		}
 
 		arsort($finalScore); // high to low
