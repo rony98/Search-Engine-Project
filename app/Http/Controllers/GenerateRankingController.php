@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
-
+ini_set('memory_limit', '20000M');
 
 class GenerateRankingController extends Controller
 {
