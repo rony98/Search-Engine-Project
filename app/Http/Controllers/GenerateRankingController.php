@@ -116,7 +116,8 @@ class GenerateRankingController extends Controller
 
         foreach($collection as $docID => $description) {
                 foreach($description as $value) {
-                    $terms = explode(' ', $value["description"]);
+                    var_dump($value);
+                    $terms = explode(' ', $value);
                     $docCount[$docID] = count($terms);
 
                     foreach($terms as $term) {
