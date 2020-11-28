@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-ini_set("memory_limit","128M");
+ini_set("memory_limit","64M");
 use Illuminate\Http\Request;
 use DB;
 
