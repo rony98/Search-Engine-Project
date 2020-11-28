@@ -24,7 +24,7 @@ class GenerateRankingController extends Controller
         }
 		$queryString = substr($queryString, 0, -4);
         $queryString = $queryString . "limit 50";
-
+        var_dump($queryString);
         $results = DB::select($queryString);
         $results = json_decode(json_encode($results), true);
         var_dump($results);
