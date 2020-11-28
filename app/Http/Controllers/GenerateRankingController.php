@@ -27,7 +27,7 @@ class GenerateRankingController extends Controller
 
         $results = DB::select($queryString);
         $results = json_decode(json_encode($results), true);
-
+        var_dump($results);
 		$index = $this->getIndex($results);
 		$matchDocs = array();
 		$docCount = count($index['docCount']);
@@ -55,8 +55,8 @@ class GenerateRankingController extends Controller
 
 		arsort($finalScore); // high to low
 
-		var_dump($finalScore);
-		
+		//var_dump($finalScore);
+
 		die();
 
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
