@@ -76,7 +76,7 @@ class GenerateRankingController extends Controller
         return $result;
 	}
 
-    function genhash($url) {
+    function genHash($url) {
         $hash = "Mining PageRank is AGAINST GOOGLE'S TERMS OF SERVICE. Yes, I'm talking to you, scammer.";
         $c = 16909125;
         $length = strlen($url);
@@ -91,7 +91,7 @@ class GenerateRankingController extends Controller
     }
 
 	function pagerank($url) {
-		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . genhash($url) . '&features=Rank&q=info:' . urlencode($url);
+		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . genHash($url) . '&features=Rank&q=info:' . urlencode($url);
 		if(function_exists('curl_init')) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -115,7 +115,7 @@ class GenerateRankingController extends Controller
         $docCount = array();
 
         foreach($collection as $docID => $description) {
-                $terms = explode(' ', $description["description"]);
+                $terms = explode(' ', $description);
                 $docCount[$docID] = count($terms);
 
                 foreach($terms as $term) {
