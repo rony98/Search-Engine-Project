@@ -56,7 +56,7 @@ class GenerateRankingController extends Controller
 		arsort($finalScore); // high to low
 
 		var_dump($finalScore);
-		echo pagerank($results[0]['website']);
+		
 		die();
 
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
