@@ -115,21 +115,23 @@ class GenerateRankingController extends Controller
         $docCount = array();
 
         foreach($collection as $docID => $description) {
-                var_dump($description);
-                $terms = explode(' ', $description);
-                $docCount[$docID] = count($terms);
+                foreach($description as $value) {
+                    $terms = explode(' ', $value["description"]);
+                    $docCount[$docID] = count($terms);
 
-                foreach($terms as $term) {
+                    foreach($terms as $term) {
                         if(!isset($dictionary[$term])) {
-                                $dictionary[$term] = array('df' => 0, 'postings' => array());
+                            $dictionary[$term] = array('df' => 0, 'postings' => array());
                         }
                         if(!isset($dictionary[$term]['postings'][$docID])) {
-                                $dictionary[$term]['df']++;
-                                $dictionary[$term]['postings'][$docID] = array('tf' => 0);
+                            $dictionary[$term]['df']++;
+                            $dictionary[$term]['postings'][$docID] = array('tf' => 0);
                         }
 
                         $dictionary[$term]['postings'][$docID]['tf']++;
+                    }
                 }
+
         }
 
         return array('docCount' => $docCount, 'dictionary' => $dictionary);
