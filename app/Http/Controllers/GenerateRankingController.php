@@ -33,12 +33,15 @@ class GenerateRankingController extends Controller
 		$docCount = count($index['docCount']);
 
 		foreach($queryArray as $qterm) {
-				$entry = $index['dictionary'][$qterm];
-				foreach($entry['postings'] as $docID => $posting) {
-						$matchDocs[$docID] +=
-										$posting['tf'] *
-										log($docCount + 1 / $entry['df'] + 1, 2);
-				}
+            if (array_key_exists($qterm, $index['dictionary'])) {
+                $entry = $index['dictionary'][$qterm];
+                foreach($entry['postings'] as $docID => $posting) {
+                    $matchDocs[$docID] +=
+                        $posting['tf'] *
+                        log($docCount + 1 / $entry['df'] + 1, 2);
+                }
+            }
+
 		}
 
 		foreach($matchDocs as $docID => $score) {
