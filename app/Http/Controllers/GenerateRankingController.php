@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-include "pr.php";
 
 use Illuminate\Http\Request;
 use DB;
@@ -48,7 +47,7 @@ class GenerateRankingController extends Controller
 		arsort($finalScore); // high to low
 
 		var_dump($finalScore);
-
+		echo pagerank($results[0]['website']);
 		die();
 
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
@@ -75,6 +74,25 @@ class GenerateRankingController extends Controller
                 $result += $weight * $docB[$key];
         }
         return $result;
+	}
+
+	function pagerank($url) {
+		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . genhash($url) . '&features=Rank&q=info:' . urlencode($url);
+		if(function_exists('curl_init')) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_URL, $googleurl);
+			$out = curl_exec($ch);
+			curl_close($ch);
+		} else {
+			$out = file_get_contents($googleurl);
+		}
+		if(strlen($out) > 0) {
+			return trim(substr(strrchr($out, ':'), 1));
+		} else {
+			return -1;
+		}
 	}
 
 	function getIndex($collection) {
