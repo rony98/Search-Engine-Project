@@ -17,7 +17,15 @@ class GenerateRankingController extends Controller
 	    // dd($query);
 	    // The above command will output query to the page
 		$queryArray = explode(" ", $query);
-        $results = DB::select('select * from results');
+
+		$queryString = "select * from results where ";
+		foreach($queryArray as $value) {
+		    $queryString = $queryString . "'description' like '%$value%' and ";
+        }
+		$queryString = substr($queryString, 0, -4);
+        $queryString = $queryString . "limit 50";
+
+        $results = DB::select($queryString);
         $results = json_decode(json_encode($results), true);
 
 		$index = $this->getIndex($results);
@@ -108,13 +116,11 @@ class GenerateRankingController extends Controller
 	}
 
 	function getIndex($collection) {
-
         $dictionary = array();
         $docCount = array();
         for ($x = 0; $x < count($collection); $x++) {
             $terms = explode(' ', $collection[$x]["description"]);
             $docCount[$x] = count($terms);
-
             foreach($terms as $term) {
                 if(!isset($dictionary[$term])) {
                     $dictionary[$term] = array('df' => 0, 'postings' => array());
@@ -123,13 +129,9 @@ class GenerateRankingController extends Controller
                     $dictionary[$term]['df']++;
                     $dictionary[$term]['postings'][$x] = array('tf' => 0);
                 }
-
                 $dictionary[$term]['postings'][$x]['tf']++;
             }
-
         }
-
-
         return array('docCount' => $docCount, 'dictionary' => $dictionary);
     }
 }
