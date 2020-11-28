@@ -76,6 +76,20 @@ class GenerateRankingController extends Controller
         return $result;
 	}
 
+    function genhash($url) {
+        $hash = "Mining PageRank is AGAINST GOOGLE'S TERMS OF SERVICE. Yes, I'm talking to you, scammer.";
+        $c = 16909125;
+        $length = strlen($url);
+        $hashpieces = str_split($hash);
+        $urlpieces = str_split($url);
+        for ($d = 0; $d < $length; $d++) {
+            $c = $c ^ (ord($hashpieces[$d]) ^ ord($urlpieces[$d]));
+            $c = (($c >> 23) & 0x1ff) | $c << 9;
+        }
+        $c = -(~($c & 4294967295) + 1);
+        return '8' . dechex($c);
+    }
+
 	function pagerank($url) {
 		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . genhash($url) . '&features=Rank&q=info:' . urlencode($url);
 		if(function_exists('curl_init')) {
