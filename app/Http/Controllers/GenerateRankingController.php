@@ -52,17 +52,15 @@ class GenerateRankingController extends Controller
 		}
 
 		foreach($matchDocs as $docID => $score) {
-				$matchDocs[$docID] = $score/$index['docCount'][$docID];
-		}
-        var_dump($matchDocs);
+            $matchDocs[$docID] = $score / $index['docCount'][$docID];
+        }
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
-			//$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5;
+			$finalScore[$docID] = 0.5 * $matchDocs[$docID] + 0.5 * $this->pageRank($results[$docID]["website"]);
 		}
 
 		arsort($finalScore); // high to low
-
-		//var_dump($finalScore);
+		var_dump($finalScore);
 
 		die();
 
@@ -84,14 +82,6 @@ class GenerateRankingController extends Controller
         //return redirect()->route('search');
 	}
 
-	function cosineSim($docA, $docB) {
-        $result = 0;
-        foreach($docA as $key => $weight) {
-                $result += $weight * $docB[$key];
-        }
-        return $result;
-	}
-
     function genHash($url) {
         $hash = "Mining PageRank is AGAINST GOOGLE'S TERMS OF SERVICE. Yes, I'm talking to you, scammer.";
         $c = 16909125;
@@ -106,8 +96,9 @@ class GenerateRankingController extends Controller
         return '8' . dechex($c);
     }
 
-	function pagerank($url) {
-		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . genHash($url) . '&features=Rank&q=info:' . urlencode($url);
+
+	function pageRank($url) {
+		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . $this->genHash($url) . '&features=Rank&q=info:' . urlencode($url);
 		if(function_exists('curl_init')) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_HEADER, 0);
