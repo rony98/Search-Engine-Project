@@ -98,7 +98,7 @@
 
         <br><br>
 
-        <button id="search" onclick="location.href='{{ url('search') }}'" class="searchBtn">Search Again</button>
+        <button id="search" onclick="location.href='{{ route('search') }}'" class="searchBtn">Search Again</button>
 
         <br><br>
     </div>
