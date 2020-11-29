@@ -82,38 +82,23 @@ class GenerateRankingController extends Controller
         //return redirect()->route('search');
 	}
 
-    function genHash($url) {
-        $hash = "Mining PageRank is AGAINST GOOGLE'S TERMS OF SERVICE. Yes, I'm talking to you, scammer.";
-        $c = 16909125;
-        $length = strlen($url);
-        $hashpieces = str_split($hash);
-        $urlpieces = str_split($url);
-        for ($d = 0; $d < $length; $d++) {
-            $c = $c ^ (ord($hashpieces[$d]) ^ ord($urlpieces[$d]));
-            $c = (($c >> 23) & 0x1ff) | $c << 9;
-        }
-        $c = -(~($c & 4294967295) + 1);
-        return '8' . dechex($c);
-    }
-
-
-	function pageRank($url) {
-		$googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . $this->genHash($url) . '&features=Rank&q=info:' . urlencode($url);
-		if(function_exists('curl_init')) {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_URL, $googleurl);
-			$out = curl_exec($ch);
-			curl_close($ch);
-		} else {
-			$out = file_get_contents($googleurl);
-		}
-		if(strlen($out) > 0) {
-			return trim(substr(strrchr($out, ':'), 1));
-		} else {
-			return -1;
-		}
+	function pageRank($url1) {
+        $url = 'https://openpagerank.com/api/v1.0/getPageRank';
+        $query = http_build_query(array(
+            'domains' => array(
+                $url1
+            )
+        ));
+        $url = $url .'?'. $query;
+        $ch = curl_init();
+        $headers = ['API-OPR: sk0044gssg0kk448skcg48gscgww0oo8gscsg408'];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec ($ch);
+        curl_close ($ch);
+        $output = json_decode($output,true);
+        var_dump($output);
 	}
 
 	function getIndex($collection) {
