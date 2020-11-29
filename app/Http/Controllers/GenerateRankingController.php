@@ -62,6 +62,11 @@ class GenerateRankingController extends Controller
 		arsort($finalScore); // high to low
 		var_dump($finalScore);
 
+		foreach($finalScore as $key => $value) {
+		    var_dump($results[$key]["website"]);
+            var_dump($results[$key]["description"]);
+        }
+
 		die();
 
 	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
