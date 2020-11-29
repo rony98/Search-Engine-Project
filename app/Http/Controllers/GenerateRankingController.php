@@ -56,7 +56,7 @@ class GenerateRankingController extends Controller
         }
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
-			$finalScore[$docID] = 0.5 * $matchDocs[$docID] + 0.5 * $this->pageRank($results[$docID]["website"]);
+			$finalScore[$docID] = 0.5 * $matchDocs[$docID] + 0.5 * floatval($this->pageRank($results[$docID]["website"]));
 		}
 
 		arsort($finalScore); // high to low
@@ -84,6 +84,7 @@ class GenerateRankingController extends Controller
 
 	function pageRank($url1) {
         $url = 'https://openpagerank.com/api/v1.0/getPageRank';
+        var_dump($url1);
         $query = http_build_query(array(
             'domains' => array(
                 $url1
