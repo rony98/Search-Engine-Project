@@ -93,6 +93,7 @@
 
         @foreach($websites as $index => $website)
             <a href="{{ $website }}" class="searchTxt">{{($index + 1) . ". " . $website}}</a>
+            <br><br>
         @endforeach
 
         <br><br>
