@@ -79,25 +79,6 @@
             margin-bottom: 30px;
         }
     </style>
-
-    <script>
-        function submitQuery()
-        {
-            var url = '{{ route('submitQuery', [":query"] ) }}';
-            url = url.replace(':query', escapeOutput(document.getElementById("query").value));
-            window.location.assign(url)
-        }
-
-        function escapeOutput(toOutput){
-            return toOutput
-                .replace(/\&/g, '&amp;')
-                .replace(/\</g, '&lt;')
-                .replace(/\>/g, '&gt;')
-                .replace(/\"/g, '&quot;')
-                .replace(/\'/g, '&#x27')
-                .replace(/\//g, '&#x2F');
-        }
-    </script>
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -106,15 +87,17 @@
             Search Engine Project
         </div>
 
-        <label class="searchLabel" for="query">Results:</label>
+        <label class="searchLabel" for="query">Query Results:</label>
 
         <br><br>
 
-        <input type="text" class="searchTxt" id="query" maxlength="256">
+        @foreach($websites as $index => $website)
+            <input type="text" class="searchTxt" value="{{($index + 1) . ". " . $website}}">
+        @endforeach
 
         <br><br>
 
-        <button id="submit" onclick="submitQuery()" class="searchBtn">Submit Query</button>
+        <button id="search" onclick="location.href='{{ url('search') }}'" class="searchBtn">Search Again</button>
 
         <br><br>
     </div>

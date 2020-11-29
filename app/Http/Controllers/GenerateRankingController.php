@@ -62,7 +62,6 @@ class GenerateRankingController extends Controller
         $count = 0;
 
         foreach ($finalScore as $key => $val) {
-            var_dump($key);
             array_push($websites, $results[$key]["website"]);
 
             $count++;
@@ -71,11 +70,7 @@ class GenerateRankingController extends Controller
             }
         }
 
-        var_dump($finalScore);
-        var_dump($websites);
-        die();
-
-        //return redirect()->route('search');
+        return redirect()->route('search')-with($websites);
 	}
 
 	function pageRank($url1) {
