@@ -84,7 +84,6 @@ class GenerateRankingController extends Controller
 
 	function pageRank($url1) {
         $url = 'https://openpagerank.com/api/v1.0/getPageRank';
-        var_dump($url1);
         $query = http_build_query(array(
             'domains' => array(
                 $url1
