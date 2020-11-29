@@ -71,7 +71,7 @@ class GenerateRankingController extends Controller
         }
 
         var_dump($websites);
-        die()
+        die();
 
         //return redirect()->route('search');
 	}
