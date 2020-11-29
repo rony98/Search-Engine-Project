@@ -98,7 +98,7 @@ class GenerateRankingController extends Controller
         $output = curl_exec ($ch);
         curl_close ($ch);
         $output = json_decode($output,true);
-        var_dump($output);
+        return $output["response"][0]["page_rank_decimal"];
 	}
 
 	function getIndex($collection) {
