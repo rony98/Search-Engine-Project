@@ -70,9 +70,8 @@ class GenerateRankingController extends Controller
             }
         }
 
-        for ($i = 0; $i < sizeof($websites); $i++) {
-            error_log($websites[$i]);
-        }
+        var_dump($websites);
+        die()
 
         //return redirect()->route('search');
 	}
