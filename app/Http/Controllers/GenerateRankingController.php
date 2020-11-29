@@ -70,6 +70,7 @@ class GenerateRankingController extends Controller
             }
         }
 
+        var_dump($finalScore);
         var_dump($websites);
         die();
 
