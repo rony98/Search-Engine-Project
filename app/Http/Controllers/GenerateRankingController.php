@@ -70,7 +70,7 @@ class GenerateRankingController extends Controller
             }
         }
 
-        return redirect()->route('resultsDisplay')-with($websites);
+        return redirect()->route('resultsDisplay', ['websites' => $websites]);
 	}
 
 	function pageRank($url1) {
