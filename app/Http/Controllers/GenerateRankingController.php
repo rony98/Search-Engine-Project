@@ -27,7 +27,7 @@ class GenerateRankingController extends Controller
 
         $results = DB::select($queryString);
         $results = json_decode(json_encode($results), true);
-   
+
 		$index = $this->getIndex($results);
 		$matchDocs = array();
 		$docCount = count($index['docCount']);
@@ -54,10 +54,10 @@ class GenerateRankingController extends Controller
 		foreach($matchDocs as $docID => $score) {
 				$matchDocs[$docID] = $score/$index['docCount'][$docID];
 		}
-
+        var_dump($matchDocs);
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
-			$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5;
+			//$finalScore[$docID] = 0.5 * $this->cosineSim() + 0.5;
 		}
 
 		arsort($finalScore); // high to low
