@@ -13,9 +13,6 @@ class GenerateRankingController extends Controller
 
     public function generateRanking($query)
     {
-	    // To use the query, just use the $query variable. E.g.
-	    // dd($query);
-	    // The above command will output query to the page
 		$queryArray = explode(" ", $query);
 
 		$queryString = "select * from results where ";
@@ -60,25 +57,21 @@ class GenerateRankingController extends Controller
 		}
 
 		arsort($finalScore); // high to low
-		var_dump($finalScore);
-		
-		die();
 
-	    // Results is gonna be a nested array. Each index in first array is an array of description/website. E.g.:
-	    // array:1 [▼
-	    //     0 => array:2 [▼
-	    // 	     "description" => "random description"
-	    // 	     "website" => "http://tst.com"
-        //     ]
-	    // ]
+        $websites = [];
+        $count = 0;
 
-	    // Returns first description
-	    // $results[0]["description"];
+        foreach ($finalScore as $key => $val) {
+            array_push($websites, $results[$key]);
 
-	    // Returns first website
-	    // $results[0]["website"];
+            $count++;
+            if ($count >= 10) {
+                break;
+            }
+        }
 
-	    // Leave the return for now. Will update in future with a proper page
+        error_log($websites);
+
         //return redirect()->route('search');
 	}
 
