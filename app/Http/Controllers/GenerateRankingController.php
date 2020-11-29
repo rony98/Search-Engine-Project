@@ -62,7 +62,7 @@ class GenerateRankingController extends Controller
         $count = 0;
 
         foreach ($finalScore as $key => $val) {
-            array_push($websites, $results[$key]);
+            array_push($websites, $results[$key]["website"]);
 
             $count++;
             if ($count >= 10) {
