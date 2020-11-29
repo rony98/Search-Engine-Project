@@ -20,7 +20,7 @@ class GenerateRankingController extends Controller
 
 		$queryString = "select * from results where ";
 		foreach($queryArray as $value) {
-		    $queryString = $queryString . "'description' like '%$value%' and ";
+		    $queryString = $queryString . "description like '%$value%' and ";
         }
 		$queryString = substr($queryString, 0, -4);
         $queryString = $queryString . "limit 50";
