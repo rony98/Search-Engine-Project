@@ -17,6 +17,6 @@ Route::get('/', 'SearchController@index')->name('search');
 
 Route::get('/resultsDisplay', function ($websites) {
    return View::make('results', array('websites' => $websites));
-});
+})->name('resultsDisplay');
 
 Route::get('/results/{query}', 'GenerateRankingController@generateRanking')->name('submitQuery');
