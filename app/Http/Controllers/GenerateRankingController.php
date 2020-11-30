@@ -48,14 +48,12 @@ class GenerateRankingController extends Controller
                         $matchDocs[$docID] +=
                             $posting['tf'] *
                             log($docCount + 1 / $entry['df'] + 1, 2);
-                        continue;
+
                     } else {
                         $matchDocs[$docID] =
                             $posting['tf'] *
                             log($docCount + 1 / $entry['df'] + 1, 2);
-                        continue;
                     }
-                    $matchDocs[$docID] = 0;
                 }
             }
 
@@ -64,12 +62,26 @@ class GenerateRankingController extends Controller
 		foreach($matchDocs as $docID => $score) {
             $matchDocs[$docID] = $score / $index['docCount'][$docID];
         }
-		var_dump($matchDocs);
+
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
 			$finalScore[$docID] = 0.5 * $matchDocs[$docID] + 0.5 * floatval($this->pageRank($results[$docID]["website"]));
 		}
 
+		if (count($finalScore) < 10) {
+		    $index = count($finalScore);
+            for ($x = 0; $x < count($results); $x++) {
+                if ($index == 10){
+                    break;
+                }
+                if(!array_key_exists($x, $finalScore)) {
+                    $finalScore[$x] = 0;
+                    $index += 1;
+                }
+            }
+        }
+        var_dump($finalScore);
+		
 		arsort($finalScore); // high to low
 
         die();
