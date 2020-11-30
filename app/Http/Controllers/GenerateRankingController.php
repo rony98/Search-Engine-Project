@@ -55,6 +55,8 @@ class GenerateRankingController extends Controller
                     }
 
                 }
+            } else {
+                $matchDocs[$docID] = 0;
             }
 
 		}
