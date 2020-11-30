@@ -80,11 +80,11 @@ class GenerateRankingController extends Controller
                 }
             }
         }
-        var_dump($finalScore);
-		
+       
+
 		arsort($finalScore); // high to low
 
-        die();
+
 
         $websites = [];
         $count = 0;
