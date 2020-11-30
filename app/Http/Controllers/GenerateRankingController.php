@@ -26,13 +26,13 @@ class GenerateRankingController extends Controller
         $results = DB::select($queryString);
         $results = json_decode(json_encode($results), true);
 
-        var_dump($results);
+
 
         if (count($results) < 10) {
             $queryString = "select * from results limit " . strval(50 - count($results));
             $resultsTMP = DB::select($queryString);
             $resultsTMP = json_decode(json_encode($resultsTMP), true);
-            array_merge($results, $resultsTMP);
+            $results = array_merge($results, $resultsTMP);
         }
 
 		$index = $this->getIndex($results);
@@ -68,7 +68,7 @@ class GenerateRankingController extends Controller
 
 		arsort($finalScore); // high to low
 
-        die();
+       
 
         $websites = [];
         $count = 0;
