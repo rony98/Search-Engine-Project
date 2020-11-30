@@ -34,7 +34,7 @@ class GenerateRankingController extends Controller
             $resultsTMP = json_decode(json_encode($resultsTMP), true);
             $results = array_merge($results, $resultsTMP);
         }
-        var_dump($results);
+
 
 		$index = $this->getIndex($results);
 		$matchDocs = array();
@@ -62,6 +62,7 @@ class GenerateRankingController extends Controller
 		foreach($matchDocs as $docID => $score) {
             $matchDocs[$docID] = $score / $index['docCount'][$docID];
         }
+		var_dump($matchDocs);
 		$finalScore = array();
 		foreach($matchDocs as $docID => $score) {
 			$finalScore[$docID] = 0.5 * $matchDocs[$docID] + 0.5 * floatval($this->pageRank($results[$docID]["website"]));
