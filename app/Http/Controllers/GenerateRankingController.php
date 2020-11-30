@@ -48,15 +48,15 @@ class GenerateRankingController extends Controller
                         $matchDocs[$docID] +=
                             $posting['tf'] *
                             log($docCount + 1 / $entry['df'] + 1, 2);
+                        continue;
                     } else {
                         $matchDocs[$docID] =
                             $posting['tf'] *
                             log($docCount + 1 / $entry['df'] + 1, 2);
+                        continue;
                     }
-
+                    $matchDocs[$docID] = 0;
                 }
-            } else {
-                $matchDocs[$docID] = 0;
             }
 
 		}
