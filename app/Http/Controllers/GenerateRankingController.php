@@ -80,7 +80,7 @@ class GenerateRankingController extends Controller
                 }
             }
         }
-       
+
 
 		arsort($finalScore); // high to low
 
